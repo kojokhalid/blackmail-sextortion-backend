@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import ChatMessage,ChatSession
 from .serializers import ChatSessionSerializer,ProfileSerializer
 # from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
-import torch
+# import torch
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from .serializers import UserSerializer
