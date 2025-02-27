@@ -24,38 +24,38 @@ const authChat = async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 // Using llama via hyperbolic
-    // const url = "https://api.hyperbolic.xyz/v1/chat/completions";
-    // const response1 = await fetch(url, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${process.env.HYPERBOLIC_API_KEY}`,
-    //   },
-    //   body: JSON.stringify({
-    //     model: "meta-llama/Llama-3.2-3B-Instruct",
-    //     messages: [
-    //       {
-    //         role: "system",
-    //         content:
-    //           "You are assisting victims of online blackmail and sextortion.",
-    //       },
-    //       { role: "user", content: userMessage },
-    //     ],
-    //     max_tokens: 250,
-    //   }),
-    // });
+    const url = "https://api.hyperbolic.xyz/v1/chat/completions";
+    const response1 = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.HYPERBOLIC_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "meta-llama/Llama-3.2-3B-Instruct",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are assisting victims of online blackmail and sextortion.",
+          },
+          { role: "user", content: userMessage },
+        ],
+        max_tokens: 500,
+      }),
+    });
 
 // Using Gemini 
-  const { GoogleGenerativeAI } = require("@google/generative-ai");
+//   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" },{ apiVersion: 'v1beta'});
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" },{ apiVersion: 'v1beta'});
 
-const prompt = `You are assisting victims of online blackmail and sextortion and creating awareness only, do not answer anything outside online sextortion and blackmail. You provide clear, concise, and accurate information. Please answer the following question: ${userMessage}`;
+// const prompt = `You are assisting victims of online blackmail and sextortion and creating awareness only, do not answer anything outside online sextortion and blackmail. You provide clear, concise, and accurate information. Please answer the following question: ${userMessage}`;
 
-const result = await model.generateContent(prompt);
-// console.log(result.response.text());
-const botResponse2 = result.response.text();
+// const result = await model.generateContent(prompt);
+// // console.log(result.response.text());
+// const botResponse2 = result.response.text();
 
     
     const json = await response1.json();
@@ -77,7 +77,7 @@ const botResponse2 = result.response.text();
           messages: {
             $each: [
               { sender: "user", message: userMessage },
-              { sender: "bot", message: botResponse2 },
+              { sender: "bot", message: botResponse },
             ],
           },
         },
@@ -88,14 +88,12 @@ const botResponse2 = result.response.text();
     res.status(200).json({
       status: "success",
       sessionId,
-      bot: botResponse2,
+      bot: botResponse,
     });
   } catch (error) {
     // console.error("Error in authChat:", error);
     res.status(500).json({ error: "Internal server error" });
-  }
-
-  
+  }  
 };
 
 module.exports = authChat;
